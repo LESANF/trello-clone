@@ -16,7 +16,7 @@ interface ICard {
 
 function DraggableCard({ items, idx }: ICard) {
     return (
-        <Draggable key={items} draggableId={items} index={idx}>
+        <Draggable draggableId={items} index={idx}>
             {(provided) => (
                 <Card ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
                     {items}

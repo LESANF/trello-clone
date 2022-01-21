@@ -1,7 +1,7 @@
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { toDoState } from './atoms';
 import Board from './Components/Board';
 
@@ -24,7 +24,9 @@ const Boards = styled.div`
 
 function App() {
     const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-        if (destination?.droppableId === source.droppableId) {
+        console.log(draggableId, destination, source);
+        if (!destination) return;
+        if (destination.droppableId === source.droppableId) {
             setTestAry((prevAry) => {
                 const oldIdx = source.index;
                 const newIdx = destination.index;
@@ -33,6 +35,23 @@ function App() {
                 cpAry.splice(newIdx, 0, draggableId);
 
                 return { ...prevAry, [destination.droppableId]: cpAry };
+            });
+        }
+
+        if (destination.droppableId !== source.droppableId) {
+            setTestAry((prevAry) => {
+                const oldIdx = source.index;
+                const newIdx = destination.index;
+                const sourceAry = [...prevAry[source.droppableId]];
+                const destinationAry = [...prevAry[destination.droppableId]];
+                sourceAry.splice(oldIdx, 1);
+                destinationAry.splice(newIdx, 0, draggableId);
+
+                return {
+                    ...prevAry,
+                    [destination.droppableId]: destinationAry,
+                    [source.droppableId]: sourceAry,
+                };
             });
         }
     };

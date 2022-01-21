@@ -24,15 +24,17 @@ const Boards = styled.div`
 
 function App() {
     const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-        if (!destination) return;
-        // const oldIdx = source.index;
-        // const newIdx = destination.index;
-        // setTestAry((prevAry) => {
-        //     const cpAry = [...prevAry];
-        //     cpAry.splice(oldIdx, 1);
-        //     cpAry.splice(newIdx, 0, draggableId);
-        //     return cpAry;
-        // });
+        if (destination?.droppableId === source.droppableId) {
+            setTestAry((prevAry) => {
+                const oldIdx = source.index;
+                const newIdx = destination.index;
+                const cpAry = [...prevAry[source.droppableId]];
+                cpAry.splice(oldIdx, 1);
+                cpAry.splice(newIdx, 0, draggableId);
+
+                return { ...prevAry, [destination.droppableId]: cpAry };
+            });
+        }
     };
 
     const [testAry, setTestAry] = useRecoilState(toDoState);

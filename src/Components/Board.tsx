@@ -4,13 +4,13 @@ import styled from 'styled-components';
 
 const Wrapper = styled.div`
     width: 300px;
-    padding: 20px 10px;
     padding-top: 10px;
     background-color: ${(props) => props.theme.boardColor};
     border-radius: 5px;
     min-height: 200px;
     min-height: 300px;
     display: flex;
+    overflow: hidden;
     flex-direction: column;
 `;
 
@@ -21,9 +21,10 @@ interface IArea {
 
 const Area = styled.div<IArea>`
     background-color: ${(props) =>
-        props.isDraggingOver ? 'pink' : props.draggingFromThisWith ? 'red' : 'blue'};
+        props.isDraggingOver ? '#dfe6e9' : props.draggingFromThisWith ? '#b2bec3' : 'transparent'};
     flex-grow: 1;
     transition: background-color 0.3s ease-in-out;
+    padding: 20px;
 `;
 
 const Title = styled.h2`

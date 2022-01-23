@@ -24,7 +24,6 @@ const Boards = styled.div`
 
 function App() {
     const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-        console.log(draggableId, destination, source);
         if (!destination) return;
         if (destination.droppableId === source.droppableId) {
             setTestAry((prevAry) => {

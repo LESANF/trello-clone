@@ -27,24 +27,19 @@ function App() {
         if (!destination) return;
         if (destination.droppableId === source.droppableId) {
             setTestAry((prevAry) => {
-                const oldIdx = source.index;
-                const newIdx = destination.index;
                 const cpAry = [...prevAry[source.droppableId]];
-                cpAry.splice(oldIdx, 1);
-                cpAry.splice(newIdx, 0, draggableId);
-
+                const spliceTarget = cpAry.splice(source.index, 1);
+                cpAry.splice(destination.index, 0, ...spliceTarget);
                 return { ...prevAry, [destination.droppableId]: cpAry };
             });
         }
 
         if (destination.droppableId !== source.droppableId) {
             setTestAry((prevAry) => {
-                const oldIdx = source.index;
-                const newIdx = destination.index;
                 const sourceAry = [...prevAry[source.droppableId]];
                 const destinationAry = [...prevAry[destination.droppableId]];
-                sourceAry.splice(oldIdx, 1);
-                destinationAry.splice(newIdx, 0, draggableId);
+                const spliceTarget = sourceAry.splice(source.index, 1);
+                destinationAry.splice(destination.index, 0, ...spliceTarget);
 
                 return {
                     ...prevAry,

@@ -1,6 +1,9 @@
 import { Droppable } from 'react-beautiful-dnd';
 import DraggableCard from './Draggable';
 import styled from 'styled-components';
+import { IToDo, toDoState } from '../atoms';
+import { useForm } from 'react-hook-form';
+import { useSetRecoilState } from 'recoil';
 
 const Wrapper = styled.div`
     width: 300px;
@@ -33,15 +36,42 @@ const Title = styled.h2`
     margin-bottom: 10px;
     font-size: 18px;
 `;
+
+const Form = styled.form`
+    input {
+        width: 100%;
+    }
+`;
+
 interface IBoard {
-    testAry: string[];
+    testAry: IToDo[];
     boardId: string;
 }
 
+interface IForm {
+    toDo: string;
+}
+
 function Board({ testAry, boardId }: IBoard) {
+    const { register, setValue, handleSubmit } = useForm<IForm>();
+    const setToDo = useSetRecoilState(toDoState);
+
+    const onValid = ({ toDo }: IForm) => {
+        setToDo((prevToDos) => {
+            const oldToDo = [...prevToDos[boardId]];
+            oldToDo.push({ id: Date.now(), text: toDo });
+            console.log(oldToDo);
+
+            return { ...prevToDos, [boardId]: oldToDo };
+        });
+        setValue('toDo', '');
+    };
     return (
         <Wrapper>
             <Title>{boardId}</Title>
+            <Form onSubmit={handleSubmit(onValid)}>
+                <input {...register('toDo', { required: true })} />
+            </Form>
             <Droppable droppableId={boardId}>
                 {(provided, snapshot) => (
                     <Area
@@ -51,7 +81,7 @@ function Board({ testAry, boardId }: IBoard) {
                         {...provided.droppableProps}
                     >
                         {testAry.map((items, idx) => (
-                            <DraggableCard key={items} items={items} idx={idx} />
+                            <DraggableCard key={items.id} text={items.text} id={items.id} idx={idx} />
                         ))}
                         {provided.placeholder}
                     </Area>

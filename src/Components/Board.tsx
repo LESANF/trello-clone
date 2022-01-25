@@ -58,11 +58,9 @@ function Board({ testAry, boardId }: IBoard) {
 
     const onValid = ({ toDo }: IForm) => {
         setToDo((prevToDos) => {
-            const oldToDo = [...prevToDos[boardId]];
-            oldToDo.push({ id: Date.now(), text: toDo });
-            console.log(oldToDo);
+            const newToDo = { id: Date.now(), text: toDo };
 
-            return { ...prevToDos, [boardId]: oldToDo };
+            return { ...prevToDos, [boardId]: [newToDo, ...prevToDos[boardId]] };
         });
         setValue('toDo', '');
     };

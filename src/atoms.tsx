@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 
 export interface IToDo {
-    id: number;
+    id: string;
     text: string;
 }
 

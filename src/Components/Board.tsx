@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { IToDo, toDoState } from '../atoms';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
+import { v4 as uuid } from 'uuid';
 
 const Wrapper = styled.div`
     width: 300px;
@@ -55,10 +56,9 @@ interface IForm {
 function Board({ testAry, boardId }: IBoard) {
     const { register, setValue, handleSubmit } = useForm<IForm>();
     const setToDo = useSetRecoilState(toDoState);
-
     const onValid = ({ toDo }: IForm) => {
         setToDo((prevToDos) => {
-            const newToDo = { id: Date.now(), text: toDo };
+            const newToDo = { id: uuid(), text: toDo };
             return { ...prevToDos, [boardId]: [newToDo, ...prevToDos[boardId]] };
         });
         setValue('toDo', '');
@@ -78,7 +78,13 @@ function Board({ testAry, boardId }: IBoard) {
                         {...provided.droppableProps}
                     >
                         {testAry.map((items, idx) => (
-                            <DraggableCard key={items.id} text={items.text} id={items.id} idx={idx} />
+                            <DraggableCard
+                                key={items.id}
+                                text={items.text}
+                                id={items.id}
+                                idx={idx}
+                                boardId={boardId}
+                            />
                         ))}
                         {provided.placeholder}
                     </Area>

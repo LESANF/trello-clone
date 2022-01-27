@@ -4,18 +4,28 @@ import styled from 'styled-components';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import { toDoState } from './atoms';
 import Board from './Components/Board';
+import Header from './Components/Header';
+import BoardForm from './Components/BoardCreater';
 
 const Wrapper = styled.div`
     display: flex;
-    max-width: 600px;
+    flex-direction: column;
+`;
+
+const BoardWrapper = styled.div`
+    display: flex;
+    position: relative;
+    max-width: 1000px;
     width: 100%;
     margin: 0 auto;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 60vh;
 `;
 
 const Boards = styled.div`
+    position: absolute;
+    top: 0;
     display: grid;
     width: 100%;
     grid-template-columns: repeat(3, 1fr);
@@ -53,15 +63,21 @@ function App() {
     const [testAry, setTestAry] = useRecoilState(toDoState);
 
     return (
-        <Wrapper>
-            <Boards>
-                <DragDropContext onDragEnd={onDragEnd}>
-                    {Object.keys(testAry).map((board) => {
-                        return <Board key={board} testAry={testAry[board]} boardId={board} />;
-                    })}
-                </DragDropContext>
-            </Boards>
-        </Wrapper>
+        <>
+            <Header />
+            <Wrapper>
+                <BoardForm />
+                <BoardWrapper>
+                    <Boards>
+                        <DragDropContext onDragEnd={onDragEnd}>
+                            {Object.keys(testAry).map((board) => {
+                                return <Board key={board} testAry={testAry[board]} boardId={board} />;
+                            })}
+                        </DragDropContext>
+                    </Boards>
+                </BoardWrapper>
+            </Wrapper>
+        </>
     );
 }
 

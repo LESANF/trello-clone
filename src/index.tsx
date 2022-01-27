@@ -72,14 +72,14 @@ a {
 }
 `;
 
+// <React.StrictMode>
+// </React.StrictMode>
 ReactDOM.render(
-    <React.StrictMode>
-        <RecoilRoot>
-            <ThemeProvider theme={basicTheme}>
-                <GlobalStyle />
-                <App />
-            </ThemeProvider>
-        </RecoilRoot>
-    </React.StrictMode>,
+    <RecoilRoot>
+        <ThemeProvider theme={basicTheme}>
+            <GlobalStyle />
+            <App />
+        </ThemeProvider>
+    </RecoilRoot>,
     document.getElementById('root')
 );

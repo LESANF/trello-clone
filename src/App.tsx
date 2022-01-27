@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { toDoState } from './atoms';
 import Board from './Components/Board';
 import Header from './Components/Header';
@@ -15,21 +15,22 @@ const Wrapper = styled.div`
 const BoardWrapper = styled.div`
     display: flex;
     position: relative;
-    max-width: 1000px;
     width: 100%;
-    margin: 0 auto;
     justify-content: center;
     align-items: center;
-    height: 60vh;
+    height: 100vh;
 `;
 
 const Boards = styled.div`
     position: absolute;
     top: 0;
-    display: grid;
-    width: 100%;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    /* width: calc(320px * 3 + 30px); */
+    width: 2000px;
+    /* grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px; */
 `;
 
 function App() {
@@ -67,15 +68,20 @@ function App() {
             <Header />
             <Wrapper>
                 <BoardForm />
-                <BoardWrapper>
-                    <Boards>
-                        <DragDropContext onDragEnd={onDragEnd}>
-                            {Object.keys(testAry).map((board) => {
-                                return <Board key={board} testAry={testAry[board]} boardId={board} />;
-                            })}
-                        </DragDropContext>
-                    </Boards>
-                </BoardWrapper>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId="all-boards" direction={'vertical' && 'horizontal'} type="column">
+                        {(provided) => (
+                            <BoardWrapper ref={provided.innerRef} {...provided.droppableProps}>
+                                <Boards>
+                                    {Object.keys(testAry).map((board) => {
+                                        return <Board key={board} testAry={testAry[board]} boardId={board} />;
+                                    })}
+                                </Boards>
+                                {provided.placeholder}
+                            </BoardWrapper>
+                        )}
+                    </Droppable>
+                </DragDropContext>
             </Wrapper>
         </>
     );

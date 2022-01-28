@@ -11,7 +11,7 @@ const Wrapper = styled.div`
     display: flex;
     width: 300px;
     box-sizing: border-box;
-    margin: 10px;
+    margin: 30px;
     padding-top: 10px;
     background-color: ${(props) => props.theme.boardColor};
     border-radius: 5px;
@@ -51,13 +51,14 @@ const Form = styled.form`
 interface IBoard {
     testAry: IToDo[];
     boardId: string;
+    idx: number;
 }
 
 interface IForm {
     toDo: string;
 }
 
-function Board({ testAry, boardId }: IBoard) {
+function Board({ testAry, boardId, idx }: IBoard) {
     const { register, setValue, handleSubmit } = useForm<IForm>();
     const setToDo = useSetRecoilState(toDoState);
     const onValid = ({ toDo }: IForm) => {
@@ -68,7 +69,7 @@ function Board({ testAry, boardId }: IBoard) {
         setValue('toDo', '');
     };
     return (
-        <Draggable draggableId={boardId} index={+boardId}>
+        <Draggable draggableId={boardId} index={idx}>
             {(provided, snapshot) => (
                 <Wrapper ref={provided.innerRef} {...provided.draggableProps}>
                     <Title {...provided.dragHandleProps}>{boardId}</Title>

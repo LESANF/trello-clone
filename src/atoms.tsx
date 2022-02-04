@@ -11,16 +11,20 @@ export interface IToDo {
     text: string;
 }
 
-export interface IToDoState {
+export interface IToDoMain {
     [key: string]: IToDo[];
+}
+
+export interface IToDoState {
+    [key: number]: IToDoMain;
 }
 
 export const toDoState = atom<IToDoState>({
     key: 'toDoState',
     default: {
-        TO_DO: [],
-        DOING: [],
-        DONE: [],
+        0: { TO_DO: [] },
+        1: { DOING: [] },
+        2: { DONE: [] },
     },
     effects_UNSTABLE: [persistAtom],
 });

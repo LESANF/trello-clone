@@ -45,6 +45,8 @@ function App() {
             /*Board Draggable */
 
             setToDoAry((prevAry) => {
+                const cpAry = { ...prevAry };
+                // Object.keys(cpAry).map((key) => console.log(cpAry[key]));
                 return prevAry;
             });
         }
@@ -75,7 +77,7 @@ function App() {
     };
 
     const [toDoAry, setToDoAry] = useRecoilState(toDoState);
-
+    console.log(Object.keys(toDoAry).length);
     return (
         <>
             <Header />

@@ -18,8 +18,9 @@ const BoardWrapper = styled.div`
     width: 100%;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 50vh;
     flex-wrap: wrap;
+    background-color: peru;
 `;
 
 const Boards = styled.div`
@@ -27,56 +28,29 @@ const Boards = styled.div`
     top: 0;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    /* width: calc(320px * 3 + 30px); */
-    width: 1500px;
+    /* flex-wrap: wrap; */
+    /* width: calc(350px * 3 + 30px); */
+    width: 1200px;
     /* grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px; */
+    background-color: aqua;
 `;
 
 function App() {
     const onDragEnd = (info: DropResult) => {
-        /*Board Draggable */
-        let test: any = {};
-        setTestAry((prevAry) => {
-            let temp = { value: {}, index: 0 };
+        console.log(info);
 
-            // console.log(info);
-            const cpObj = { ...prevAry };
-            // const cpToDos = [...prevAry[info.draggableId]];
-            // delete cpObj[info.draggableId];
-            // console.log('cptodos: ', cpToDos);
-            const cpObjToAry = Object.entries(cpObj).map(([key, value]) => ({ [key]: value }));
+        if (!info.destination) return;
+        if (info.type === 'board') {
+            /*Board Draggable */
 
-            cpObjToAry.filter((v, index) => {
-                const a = Object.keys(v).toString() !== info.draggableId;
-                if (a === false) {
-                    temp.value = v;
-                    temp.index = index;
-                }
-                return a;
+            setToDoAry((prevAry) => {
+                return prevAry;
             });
+        }
 
-            cpObjToAry.splice(info.source.index, 1);
-            if (info.destination) {
-                cpObjToAry.splice(info.destination.index, 0, temp.value);
-            }
-
-            cpObjToAry.map((v) =>
-                Object.entries(v).map(([key, value]) => {
-                    console.log(`key: ${key}, value: ${value}`);
-                    test[key] = value;
-                })
-            );
-
-            console.log(test);
-
-            return test;
-        });
-
-        // if (!destination) return;
         // if (destination.droppableId === source.droppableId) {
-        //     setTestAry((prevAry) => {
+        //     setToDoAry((prevAry) => {
         //         const cpAry = [...prevAry[source.droppableId]];
         //         const spliceTarget = cpAry.splice(source.index, 1);
         //         cpAry.splice(destination.index, 0, ...spliceTarget);
@@ -85,7 +59,7 @@ function App() {
         // }
 
         // if (destination.droppableId !== source.droppableId) {
-        //     setTestAry((prevAry) => {
+        //     setToDoAry((prevAry) => {
         //         const sourceAry = [...prevAry[source.droppableId]];
         //         const destinationAry = [...prevAry[destination.droppableId]];
         //         const spliceTarget = sourceAry.splice(source.index, 1);
@@ -100,7 +74,7 @@ function App() {
         // }
     };
 
-    const [testAry, setTestAry] = useRecoilState(toDoState);
+    const [toDoAry, setToDoAry] = useRecoilState(toDoState);
 
     return (
         <>
@@ -108,22 +82,22 @@ function App() {
             <Wrapper>
                 <BoardForm />
                 <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId="all-boards" direction="horizontal">
+                    <Droppable droppableId="all-boards" direction="horizontal" type="board">
                         {(provided) => (
-                            <BoardWrapper ref={provided.innerRef} {...provided.droppableProps}>
-                                <Boards>
-                                    {Object.keys(testAry).map((board, idx) => {
+                            <BoardWrapper>
+                                <Boards ref={provided.innerRef} {...provided.droppableProps}>
+                                    {Object.keys(toDoAry).map((board, idx) => {
                                         return (
                                             <Board
                                                 key={board}
-                                                testAry={testAry[board]}
+                                                testAry={toDoAry[board]}
                                                 boardId={board}
                                                 idx={idx}
                                             />
                                         );
                                     })}
+                                    {provided.placeholder}
                                 </Boards>
-                                {provided.placeholder}
                             </BoardWrapper>
                         )}
                     </Droppable>

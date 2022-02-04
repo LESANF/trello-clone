@@ -9,6 +9,7 @@ const Wrapper = styled.div`
     width: 100%;
     display: flex;
     margin-bottom: 5px;
+    background-color: pink;
 `;
 
 const Card = styled.div<{ isDragging: boolean }>`
@@ -32,7 +33,7 @@ const DelBtn = styled.div`
     cursor: pointer;
 `;
 
-interface ICard {
+export interface ICard {
     text: string;
     id: string;
     idx: number;

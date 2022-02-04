@@ -6,16 +6,17 @@ import { IToDo, toDoState } from '../atoms';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import { v4 as uuid } from 'uuid';
+import CardZone from './CardZone';
 
 const Wrapper = styled.div`
     display: flex;
     width: 300px;
     box-sizing: border-box;
-    margin: 30px;
+    margin: 20px;
     padding-top: 10px;
-    background-color: ${(props) => props.theme.boardColor};
+    /* background-color: ${(props) => props.theme.boardColor}; */
+    background-color: blue;
     border-radius: 5px;
-    min-height: 200px;
     min-height: 300px;
     overflow: hidden;
     flex-direction: column;
@@ -28,12 +29,6 @@ interface IArea {
 
 /* background-color: ${(props) =>
         props.isDraggingOver ? '#dfe6e9' : props.draggingFromThisWith ? '#b2bec3' : 'transparent'}; */
-
-const Area = styled.div<IArea>`
-    flex-grow: 1;
-    transition: background-color 0.3s ease-in-out;
-    padding: 20px;
-`;
 
 const Title = styled.h2`
     text-align: center;
@@ -70,27 +65,14 @@ function Board({ testAry, boardId, idx }: IBoard) {
     };
     return (
         <Draggable draggableId={boardId} index={idx}>
-            {(provided, snapshot) => (
+            {(provided) => (
                 <Wrapper ref={provided.innerRef} {...provided.draggableProps}>
                     <Title {...provided.dragHandleProps}>{boardId}</Title>
+
                     <Form onSubmit={handleSubmit(onValid)}>
                         <input {...register('toDo', { required: true })} />
                     </Form>
-                    <Area
-                    // isDraggingOver={snapshot.isDraggingOver}
-                    // draggingFromThisWith={Boolean(snapshot.draggingFromThisWith)}
-                    // ref={provided.innerRef}
-                    >
-                        {testAry.map((items, idx) => (
-                            <DraggableCard
-                                key={items.id}
-                                text={items.text}
-                                id={items.id}
-                                idx={idx}
-                                boardId={boardId}
-                            />
-                        ))}
-                    </Area>
+                    <CardZone testAry={testAry} />
                 </Wrapper>
             )}
         </Draggable>

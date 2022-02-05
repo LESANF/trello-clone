@@ -2,7 +2,7 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { toDoState } from './atoms';
+import { IToDoState, toDoState } from './atoms';
 import Board from './Components/Board';
 import Header from './Components/Header';
 import BoardForm from './Components/BoardCreater';
@@ -38,16 +38,33 @@ const Boards = styled.div`
 
 function App() {
     const onDragEnd = (info: DropResult) => {
-        console.log(info);
-
-        if (!info.destination) return;
-        if (info.type === 'board') {
+        const { destination, source, type, draggableId } = info;
+        if (!destination) return;
+        if (type === 'board') {
             /*Board Draggable */
+            if (destination.index === source.index) return;
 
             setToDoAry((prevAry) => {
                 const cpAry = { ...prevAry };
-                // Object.keys(cpAry).map((key) => console.log(cpAry[key]));
-                return prevAry;
+                const cpAryKeys = Object.keys(cpAry);
+                cpAryKeys.splice(source.index, 1);
+                cpAryKeys.splice(destination.index, 0, draggableId);
+
+                const returnObj: IToDoState = {};
+                cpAryKeys.forEach((key) => {
+                    returnObj[key] = prevAry[key];
+                });
+
+                return returnObj;
+                // if (info.destination) {
+                //     const startIdx = info.source.index;
+                //     const endIdx = info.destination?.index;
+
+                //     const spliceTarget = cpAryValue.splice(startIdx, 1);
+                //     // cpAryValue.splice(endIdx, 0, spliceTarget);
+                //     console.log(spliceTarget);
+                //     return prevAry;
+                // }
             });
         }
 
@@ -77,7 +94,7 @@ function App() {
     };
 
     const [toDoAry, setToDoAry] = useRecoilState(toDoState);
-    console.log(Object.keys(toDoAry).length);
+
     return (
         <>
             <Header />

@@ -39,32 +39,18 @@ const Boards = styled.div`
 function App() {
     const onDragEnd = (info: DropResult) => {
         const { destination, source, type, draggableId } = info;
+        console.log('info: ', info);
         if (!destination) return;
         if (type === 'board') {
             /*Board Draggable */
             if (destination.index === source.index) return;
 
             setToDoAry((prevAry) => {
-                const cpAry = { ...prevAry };
-                const cpAryKeys = Object.keys(cpAry);
-                cpAryKeys.splice(source.index, 1);
-                cpAryKeys.splice(destination.index, 0, draggableId);
+                const cpAry = [...prevAry];
+                const spliceTarget = cpAry.splice(source.index, 1);
+                cpAry.splice(destination.index, 0, ...spliceTarget);
 
-                const returnObj: IToDoState = {};
-                cpAryKeys.forEach((key) => {
-                    returnObj[key] = prevAry[key];
-                });
-
-                return returnObj;
-                // if (info.destination) {
-                //     const startIdx = info.source.index;
-                //     const endIdx = info.destination?.index;
-
-                //     const spliceTarget = cpAryValue.splice(startIdx, 1);
-                //     // cpAryValue.splice(endIdx, 0, spliceTarget);
-                //     console.log(spliceTarget);
-                //     return prevAry;
-                // }
+                return cpAry;
             });
         }
 
@@ -94,6 +80,7 @@ function App() {
     };
 
     const [toDoAry, setToDoAry] = useRecoilState(toDoState);
+    console.log(toDoAry);
 
     return (
         <>
@@ -105,12 +92,13 @@ function App() {
                         {(provided) => (
                             <BoardWrapper>
                                 <Boards ref={provided.innerRef} {...provided.droppableProps}>
-                                    {Object.keys(toDoAry).map((board, idx) => {
+                                    {toDoAry.map((board, idx) => {
+                                        const boardName = Object.keys(board).toString();
                                         return (
                                             <Board
-                                                key={board}
-                                                testAry={toDoAry[board]}
-                                                boardId={board}
+                                                key={boardName}
+                                                testAry={board[idx]}
+                                                boardId={boardName}
                                                 idx={idx}
                                             />
                                         );

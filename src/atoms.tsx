@@ -15,12 +15,8 @@ export interface IToDoState {
     [key: string]: IToDo[];
 }
 
-export const toDoState = atom<IToDoState>({
+export const toDoState = atom<IToDoState[]>({
     key: 'toDoState',
-    default: {
-        TO_DO: [],
-        DOING: [],
-        DONE: [],
-    },
+    default: [{ TO_DO: [] }, { DOING: [] }, { DONE: [] }],
     effects_UNSTABLE: [persistAtom],
 });

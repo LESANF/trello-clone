@@ -72,7 +72,7 @@ function Board({ testAry, boardId, idx }: IBoard) {
                     <Form onSubmit={handleSubmit(onValid)}>
                         <input {...register('toDo', { required: true })} />
                     </Form>
-                    <CardZone testAry={testAry} />
+                    {/* <CardZone testAry={testAry} /> */}
                 </Wrapper>
             )}
         </Draggable>

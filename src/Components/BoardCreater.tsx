@@ -32,7 +32,7 @@ function BoardForm() {
 
     const onValid = ({ addBoard }: IBoard) => {
         setBoard((prevBoard) => {
-            return { [addBoard]: [], ...prevBoard };
+            return [{ [addBoard]: [] }, ...prevBoard];
         });
         setValue('addBoard', '');
     };

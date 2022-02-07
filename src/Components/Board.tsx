@@ -9,17 +9,17 @@ import { v4 as uuid } from 'uuid';
 import CardZone from './CardZone';
 
 const Wrapper = styled.div`
-    display: flex;
+    /* display: flex;
+    flex-direction: column; */
+    flex: 0 0 auto;
     width: 300px;
+    height: 300px;
     box-sizing: border-box;
     margin: 20px;
     padding-top: 10px;
     /* background-color: ${(props) => props.theme.boardColor}; */
     background-color: blue;
     border-radius: 5px;
-    min-height: 300px;
-    overflow: hidden;
-    flex-direction: column;
 `;
 
 interface IArea {

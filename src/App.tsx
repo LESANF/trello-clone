@@ -25,12 +25,15 @@ const BoardWrapper = styled.div`
 
 const Boards = styled.div`
     position: absolute;
+    width: 1200px;
+    height: 360px;
     top: 0;
     display: flex;
-    justify-content: center;
-    /* flex-wrap: wrap; */
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+    /* flex-wrap: wrap;
+    overflow: hidden; */
     /* width: calc(350px * 3 + 30px); */
-    width: 1200px;
     /* grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px; */
     background-color: aqua;

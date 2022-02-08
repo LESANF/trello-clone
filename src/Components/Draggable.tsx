@@ -43,21 +43,20 @@ export interface ICard {
 function DraggableCard(info: ICard) {
     const setDel = useSetRecoilState(toDoState);
 
-    const deleteToDo = () => {
-        setDel((prevToDo) => {
-            const cpAry = [...prevToDo[info.boardId]];
-            cpAry.splice(info.idx, 1);
-
-            return { ...prevToDo, [info.boardId]: cpAry };
-        });
-    };
+    // const deleteToDo = () => {
+    //     // setDel((prevToDo) => {
+    //     //     const cpAry = [...prevToDo[info.boardId]];
+    //     //     cpAry.splice(info.idx, 1);
+    //     //     return { ...prevToDo, [info.boardId]: cpAry };
+    //     // });
+    // };
 
     return (
         <Draggable draggableId={info.id + ''} index={info.idx}>
             {(provided, snapshot) => (
                 <Wrapper ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
                     <Card isDragging={snapshot.isDragging}>{info.text}</Card>
-                    <DelBtn onClick={deleteToDo}>
+                    <DelBtn>
                         <IoTrash className="trashBtn" />
                     </DelBtn>
                 </Wrapper>

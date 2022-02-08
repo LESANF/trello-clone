@@ -9,9 +9,9 @@ import { v4 as uuid } from 'uuid';
 import CardZone from './CardZone';
 
 const Wrapper = styled.div`
-    /* display: flex;
-    flex-direction: column; */
     flex: 0 0 auto;
+    flex-direction: column;
+    display: flex;
     width: 300px;
     height: 300px;
     box-sizing: border-box;
@@ -43,8 +43,7 @@ const Form = styled.form`
     }
 `;
 
-interface IBoard {
-    testAry: IToDo[];
+export interface IBoard {
     boardId: string;
     idx: number;
 }
@@ -53,13 +52,21 @@ interface IForm {
     toDo: string;
 }
 
-function Board({ testAry, boardId, idx }: IBoard) {
+function Board({ boardId, idx }: IBoard) {
     const { register, setValue, handleSubmit } = useForm<IForm>();
     const setToDo = useSetRecoilState(toDoState);
     const onValid = ({ toDo }: IForm) => {
         setToDo((prevToDos) => {
-            const newToDo = { id: uuid(), text: toDo };
-            return { ...prevToDos, [boardId]: [newToDo, ...prevToDos[boardId]] };
+            const newToDo: IToDo = { id: uuid(), text: toDo };
+            const cpAry = [...prevToDos];
+
+            const targetValue = cpAry[idx][boardId];
+            const boardList = [...targetValue, newToDo];
+            //새로운 list를 복사하여 붙여넣기위한 행위. 이제 TO_DO의 value값을 구함.
+
+            cpAry[idx] = { [boardId]: boardList };
+
+            return cpAry;
         });
         setValue('toDo', '');
     };
@@ -72,7 +79,7 @@ function Board({ testAry, boardId, idx }: IBoard) {
                     <Form onSubmit={handleSubmit(onValid)}>
                         <input {...register('toDo', { required: true })} />
                     </Form>
-                    {/* <CardZone testAry={testAry} /> */}
+                    <CardZone boardId={boardId} idx={idx} />
                 </Wrapper>
             )}
         </Draggable>

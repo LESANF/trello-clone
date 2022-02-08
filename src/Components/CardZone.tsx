@@ -1,6 +1,8 @@
 import { Droppable } from 'react-beautiful-dnd';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
-import { IToDoState } from '../atoms';
+import { toDoState } from '../atoms';
+import { IBoard } from './Board';
 import DraggableCard from './Draggable';
 
 const Wrapper = styled.div`
@@ -10,18 +12,21 @@ const Wrapper = styled.div`
     background-color: pink;
 `;
 
-function CardZone({ testAry }: IToDoState) {
+function CardZone({ boardId, idx }: IBoard) {
+    const toDoData = useRecoilValue(toDoState);
+    const toDosAry = toDoData[idx][boardId];
+
     return (
         <Droppable droppableId={'todos'} type="todosList">
             {(provided) => (
                 <Wrapper ref={provided.innerRef} {...provided.droppableProps}>
-                    {testAry.map((items, idx) => (
+                    {toDosAry.map((items, idx) => (
                         <DraggableCard
                             key={items.id}
                             text={items.text}
                             id={items.id}
+                            boardId={boardId}
                             idx={idx}
-                            boardId={'1'}
                         />
                     ))}
                     {provided.placeholder}

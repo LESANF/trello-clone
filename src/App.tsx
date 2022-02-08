@@ -30,19 +30,13 @@ const Boards = styled.div`
     top: 0;
     display: flex;
     flex-wrap: nowrap;
-    overflow-x: scroll;
-    /* flex-wrap: wrap;
-    overflow: hidden; */
-    /* width: calc(350px * 3 + 30px); */
-    /* grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px; */
+    overflow-x: auto;
     background-color: aqua;
 `;
 
 function App() {
     const onDragEnd = (info: DropResult) => {
         const { destination, source, type, draggableId } = info;
-        console.log('info: ', info);
         if (!destination) return;
         if (type === 'board') {
             /*Board Draggable */
@@ -83,7 +77,6 @@ function App() {
     };
 
     const [toDoAry, setToDoAry] = useRecoilState(toDoState);
-    console.log(toDoAry);
 
     return (
         <>
@@ -97,14 +90,7 @@ function App() {
                                 <Boards ref={provided.innerRef} {...provided.droppableProps}>
                                     {toDoAry.map((board, idx) => {
                                         const boardName = Object.keys(board).toString();
-                                        return (
-                                            <Board
-                                                key={boardName}
-                                                testAry={board[idx]}
-                                                boardId={boardName}
-                                                idx={idx}
-                                            />
-                                        );
+                                        return <Board key={boardName} boardId={boardName} idx={idx} />;
                                     })}
                                     {provided.placeholder}
                                 </Boards>

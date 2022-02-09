@@ -70,6 +70,7 @@ function Board({ boardId, idx }: IBoard) {
         });
         setValue('toDo', '');
     };
+
     return (
         <Draggable draggableId={boardId} index={idx}>
             {(provided) => (

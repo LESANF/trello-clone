@@ -51,6 +51,45 @@ function App() {
             });
         }
 
+        if (type === 'todosList') {
+            /*ToDoList Draggable */
+            // if (destination.index === source.index) return;
+
+            // 같은 보드내에서의 이동
+            if (source.droppableId === destination.droppableId) {
+                //움직임이 없을 경우
+                if (source.index === destination.index) return;
+
+                console.log(`출발: ${source.droppableId}, 순서: ${source.index}`);
+                console.log(`도착: ${destination.droppableId}, 순서: ${destination.index}`);
+
+                setToDoAry((prevAry) => {
+                    const cpAry = [...prevAry];
+                    const currentAry = cpAry.filter(
+                        (items) => Object.keys(items).toString() === source.droppableId
+                    );
+
+                    const resultAry = [...currentAry[0][source.droppableId]];
+                    const spliceTarget = resultAry.splice(source.index, 1);
+                    resultAry.splice(destination.index, 0, ...spliceTarget);
+
+                    cpAry.forEach((items, idx) => {
+                        if (Object.keys(items).toString() === source.droppableId) {
+                            cpAry[idx] = { [source.droppableId]: resultAry };
+                        }
+                    });
+
+                    return cpAry;
+                });
+            }
+
+            // setToDoAry((prevAry) => {
+            //     const cpAry = [...prevAry];
+            //     console.log('prevAry: ', prevAry);
+            //     return prevAry;
+            // });
+        }
+
         // if (destination.droppableId === source.droppableId) {
         //     setToDoAry((prevAry) => {
         //         const cpAry = [...prevAry[source.droppableId]];

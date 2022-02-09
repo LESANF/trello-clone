@@ -17,7 +17,7 @@ function CardZone({ boardId, idx }: IBoard) {
     const toDosAry = toDoData[idx][boardId];
 
     return (
-        <Droppable droppableId={'todos'} type="todosList">
+        <Droppable droppableId={boardId} type="todosList">
             {(provided) => (
                 <Wrapper ref={provided.innerRef} {...provided.droppableProps}>
                     {toDosAry.map((items, idx) => (
@@ -29,6 +29,7 @@ function CardZone({ boardId, idx }: IBoard) {
                             idx={idx}
                         />
                     ))}
+
                     {provided.placeholder}
                 </Wrapper>
             )}

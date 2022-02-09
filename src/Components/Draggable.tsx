@@ -43,13 +43,13 @@ export interface ICard {
 function DraggableCard(info: ICard) {
     const setDel = useSetRecoilState(toDoState);
 
-    // const deleteToDo = () => {
-    //     // setDel((prevToDo) => {
-    //     //     const cpAry = [...prevToDo[info.boardId]];
-    //     //     cpAry.splice(info.idx, 1);
-    //     //     return { ...prevToDo, [info.boardId]: cpAry };
-    //     // });
-    // };
+    const deleteToDo = () => {
+        // setDel((prevToDo) => {
+        //     const cpAry = [...prevToDo[info.boardId]];
+        //     cpAry.splice(info.idx, 1);
+        //     return { ...prevToDo, [info.boardId]: cpAry };
+        // });
+    };
 
     return (
         <Draggable draggableId={info.id + ''} index={info.idx}>

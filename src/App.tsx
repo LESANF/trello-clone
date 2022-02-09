@@ -2,7 +2,7 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import { IToDoState, toDoState } from './atoms';
+import { toDoState } from './atoms';
 import Board from './Components/Board';
 import Header from './Components/Header';
 import BoardForm from './Components/BoardCreater';
@@ -36,10 +36,11 @@ const Boards = styled.div`
 
 function App() {
     const onDragEnd = (info: DropResult) => {
-        const { destination, source, type, draggableId } = info;
+        const { destination, source, type } = info;
         if (!destination) return;
+
+        /*Board Draggable */
         if (type === 'board') {
-            /*Board Draggable */
             if (destination.index === source.index) return;
 
             setToDoAry((prevAry) => {
@@ -51,17 +52,12 @@ function App() {
             });
         }
 
+        /*ToDoList Draggable */
         if (type === 'todosList') {
-            /*ToDoList Draggable */
-            // if (destination.index === source.index) return;
-
             // 같은 보드내에서의 이동
             if (source.droppableId === destination.droppableId) {
                 //움직임이 없을 경우
                 if (source.index === destination.index) return;
-
-                console.log(`출발: ${source.droppableId}, 순서: ${source.index}`);
-                console.log(`도착: ${destination.droppableId}, 순서: ${destination.index}`);
 
                 setToDoAry((prevAry) => {
                     const cpAry = [...prevAry];
@@ -83,36 +79,36 @@ function App() {
                 });
             }
 
-            // setToDoAry((prevAry) => {
-            //     const cpAry = [...prevAry];
-            //     console.log('prevAry: ', prevAry);
-            //     return prevAry;
-            // });
+            // 다른보드로 이동
+            if (source.droppableId !== destination.droppableId) {
+                setToDoAry((prevAry) => {
+                    const cpAry = [...prevAry];
+                    const currentAry = cpAry.filter(
+                        (items) => Object.keys(items).toString() === source.droppableId
+                    );
+
+                    const arriveAry = cpAry.filter(
+                        (items) => Object.keys(items).toString() === destination.droppableId
+                    );
+
+                    const curResultAry = [...currentAry[0][source.droppableId]];
+                    const spliceTarget = curResultAry.splice(source.index, 1);
+                    const desResultAry = [...arriveAry[0][destination.droppableId]];
+                    desResultAry.splice(destination.index, 0, ...spliceTarget);
+
+                    cpAry.forEach((items, idx) => {
+                        if (Object.keys(items).toString() === source.droppableId) {
+                            cpAry[idx] = { [source.droppableId]: curResultAry };
+                        }
+                        if (Object.keys(items).toString() === destination.droppableId) {
+                            cpAry[idx] = { [destination.droppableId]: desResultAry };
+                        }
+                    });
+
+                    return cpAry;
+                });
+            }
         }
-
-        // if (destination.droppableId === source.droppableId) {
-        //     setToDoAry((prevAry) => {
-        //         const cpAry = [...prevAry[source.droppableId]];
-        //         const spliceTarget = cpAry.splice(source.index, 1);
-        //         cpAry.splice(destination.index, 0, ...spliceTarget);
-        //         return { ...prevAry, [destination.droppableId]: cpAry };
-        //     });
-        // }
-
-        // if (destination.droppableId !== source.droppableId) {
-        //     setToDoAry((prevAry) => {
-        //         const sourceAry = [...prevAry[source.droppableId]];
-        //         const destinationAry = [...prevAry[destination.droppableId]];
-        //         const spliceTarget = sourceAry.splice(source.index, 1);
-        //         destinationAry.splice(destination.index, 0, ...spliceTarget);
-
-        //         return {
-        //             ...prevAry,
-        //             [destination.droppableId]: destinationAry,
-        //             [source.droppableId]: sourceAry,
-        //         };
-        //     });
-        // }
     };
 
     const [toDoAry, setToDoAry] = useRecoilState(toDoState);
